@@ -1,0 +1,51 @@
+# ----------------------------------------
+# Generales del Entorno
+# ----------------------------------------
+.DS_Store
+Thumbs.db
+*.log
+*.sqlite
+*.swp
+
+# ----------------------------------------
+# Entorno Python/Venv
+# ----------------------------------------
+# Directorios de entornos virtuales
+venv/
+env/
+.venv/
+
+# Archivos de caché
+__pycache__/
+*.pyc
+*.pyo
+
+# Paquetes instalados (se deben instalar con requirements.txt)
+# Si usas Python para Lambda, NO debes subir la carpeta de dependencias
+# (a menos que uses un layer o la incluyas en un paquete zip localmente)
+/lib/
+/site-packages/
+
+# ----------------------------------------
+# Artefactos de AWS Serverless (SAM/Frameworks)
+# ----------------------------------------
+# Directorios generados por AWS SAM o Serverless Framework
+.aws-sam/
+.serverless/
+artifacts/
+package.yaml
+package.json # Si es Node.js, pero es bueno incluirlo
+
+# Archivos de despliegue (binarios o zip que se generan)
+*.zip
+*.tar.gz
+*.egg
+*.whl
+
+# ----------------------------------------
+# Archivos de Configuración Local y Credenciales
+# ----------------------------------------
+.env
+.local
+.aws/
+config.ini
