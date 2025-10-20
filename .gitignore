@@ -49,3 +49,19 @@ package.json # Si es Node.js, pero es bueno incluirlo
 .local
 .aws/
 config.ini
+
+# ----------------------------------------
+# Archivos Personales
+# ----------------------------------------
+*.docx
+*.doc
+*.pdf
+*.jpg
+*.png
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.webp
+clave.txt
