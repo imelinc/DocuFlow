@@ -18,3 +18,25 @@ dynamodb = boto3.resource('dynamodb')
 
 # VARIABLE DE ENTORNO
 DYNAMODB_TABLE = os.environ.get('DYNAMODB_TABLE') # os.environ.get() lee las variables de entorno 
+
+def lambda_handler(event, context):
+    """
+    Funcion principal que se ejecuta cuando llega un archivo a S3.
+    event: diccionario JSON que contiene la informacion del disparo de la funcion, en este caso, 
+    informacion sobre el archivos que se subio a S3.
+    context: objeto que contiene informacion sobre el contexto de la funcion, como el tiempo de ejecucion, 
+    el entorno, etc.
+    """
+    try:
+        # Logica de procesamiento del archivo
+        pass
+    except Exception as e:
+        # Capturamos cualquier error que ocurra
+        print(f"Error procesando la factura: {str(e)}")
+        return {
+            'statusCode': 500, # codigo HTTP de error
+            'body': json.dumps({ # cuerpo de la respuesta en formato JSON
+                'message': f'Error procesando la factura: {str(e)}',
+                'error': str(e)
+            })
+        }
