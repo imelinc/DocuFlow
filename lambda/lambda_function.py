@@ -29,7 +29,20 @@ def lambda_handler(event, context):
     """
     try:
         # Logica de procesamiento del archivo
-        pass
+        
+        # primero obtenemos informacion del evento s3
+        bucket_name = event['Records'][0]['s3']['bucket']['name']
+        object_key = unquote_plus(event['Records'][0]['s3']['object']['key']) # usamos unquote_plus para decodificar el nombre del archivo
+
+        print(f"Procesando archivo: {object_key} desde el bucket: {bucket_name}")
+
+        # obtenemos metadata del archivo
+        # con get_object obtenemos el objeto completo del archivo en S3 dando el nombre del bucket y el nombre del archivo
+        # devuelve datos como: `Body`, `LastModified`, `ContentType`, `ContentLength`, `Metadata`, etc.
+        s3_object = s3_client.get_object(Bucket=bucket_name, Key=object_key)
+    
+    
+    
     except Exception as e:
         # Capturamos cualquier error que ocurra
         print(f"Error procesando la factura: {str(e)}")
