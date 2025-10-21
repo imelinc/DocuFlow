@@ -30,7 +30,7 @@ def lambda_handler(event, context):
     try:
         # Logica de procesamiento del archivo
         
-        # primero obtenemos informacion del evento s3
+        # 1 - primero obtenemos informacion del evento s3
         bucket_name = event['Records'][0]['s3']['bucket']['name']
         object_key = unquote_plus(event['Records'][0]['s3']['object']['key']) # usamos unquote_plus para decodificar el nombre del archivo
 
@@ -38,8 +38,21 @@ def lambda_handler(event, context):
 
         # obtenemos metadata del archivo
         # con get_object obtenemos el objeto completo del archivo en S3 dando el nombre del bucket y el nombre del archivo
-        # devuelve datos como: `Body`, `LastModified`, `ContentType`, `ContentLength`, `Metadata`, etc.
+        # devuelve datos como: `Body` (formato stream), `LastModified`, `ContentType`, `ContentLength`, `Metadata`, etc en formato de diccionario.
         s3_object = s3_client.get_object(Bucket=bucket_name, Key=object_key)
+
+
+        # 2 - Procesamos con Textract
+        print("Iniciando analisis con Textract...")
+        textract_response = textract_client.detect_document_text( # esto extrae todo el texto del documento.
+            Document = {
+                'S3Object': {
+                    'Bucket': bucket_name,
+                    'Name': object_key
+                } # de esta forma leemos desde S3 el archivo pasandole el nombre del bucket y el nombre del archivo.
+            }
+        )
+
     
     
     
