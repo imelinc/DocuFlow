@@ -70,7 +70,7 @@ def lambda_handler(event, context):
             "Date": datetime.now().isoformat(),
             "s3Bucket": bucket_name,
             "s3Key": object_key,
-            "extractedText": texto_extraido,
+            "extractedText": texto_extraido[:1000], # limitamos el texto a 1000 caracteres para no exceder el limite de DynamoDB.
             "status": "processed",
             "processingDate": datetime.now().isoformat(),
         }
