@@ -53,7 +53,16 @@ def lambda_handler(event, context):
             }
         )
 
-    
+        # 3 - Extraer el texto del documento
+        texto_extraido = "" # iniciamos una cadena de texto vacia para guardar el texto extraido.
+        for item in textract_response['Blocks']: # iteramos sobre los bloques de texto extraido. Cada item es un diccionario con el texto extraido.
+            if item['BlockType'] == 'LINE': # si el bloque es de tipo linea, agregamos el texto a la cadena.
+                texto_extraido += item['Text'] + " " # agregamos el texto a la cadena.
+        print(f"Texto extraido: {texto_extraido[:200]}...") # mostramos el texto extraido (primeros 200 caracteres).
+
+        # 4 - creamos el registro para DynamoDB
+        table = dynamodb.Table(DYNAMODB_TABLE)
+        invoice_id = object_key.split('/')[-1] # usamos el nombre de archivo como ID de la factura.
     
     
     except Exception as e:
