@@ -63,7 +63,30 @@ def lambda_handler(event, context):
         # 4 - creamos el registro para DynamoDB
         table = dynamodb.Table(DYNAMODB_TABLE)
         invoice_id = object_key.split('/')[-1] # usamos el nombre de archivo como ID de la factura.
-    
+
+        # construimos el item de DynamoDB
+        item = {
+            'invoiceId': invoice_id,
+            "Date": datetime.now().isoformat(),
+            "s3Bucket": bucket_name,
+            "s3Key": object_key,
+            "extractedText": texto_extraido,
+            "status": "processed",
+            "processingDate": datetime.now().isoformat(),
+        }
+
+        # Guardamos el registro en DynamoDB
+        table.put_item(Item=item)
+        print(f"Registro creado en DynamoDB: {invoice_id}")
+
+        # 5 - retornamos la respuesta exitosa
+        return {
+            'statusCode': 200, # codigo HTTP de exito
+            'body': json.dumps({ # cuerpo de la respuesta en formato JSON
+                'message': f'Factura procesada exitosamente: {invoice_id}',
+                'invoiceId': invoice_id
+            })
+        }
     
     except Exception as e:
         # Capturamos cualquier error que ocurra
