@@ -3,6 +3,7 @@ import boto3 # biblioteca oficial de AWS que permite interactual con los servici
 import os # biblioteca para interactuar con el sistema operativo
 from datetime import datetime # biblioteca para manejar fechas y horas
 from urllib.parse import unquote_plus # biblioteca para decodificar URLs ("+", "%20", etc.)
+import re # biblioteca para expresiones regulares
 
 # Vamos a crear las conexiones con los servicios de AWS que vamos a utilizar
 
@@ -98,3 +99,40 @@ def lambda_handler(event, context):
                 'error': str(e)
             })
         }
+
+def extract_invoice_data(text):
+    """
+    Extrae información estructurada del texto de la factura usando regex
+    """
+    data = {} # diccionario para guardar la informacion extraida.
+
+    # Extraer proveedor/empresa
+    # Busca patrones como "Empresa:", "Proveedor:", "Razón Social:"
+    provedor = re.search(r'(?:Empresa|Proveedor|Razón Social):\s*(.+))', text, re.IGNORECASE)
+    if provedor:
+        data['proveedor'] = provedor.group(1).strip() # group(1) es el primer grupo de la expresion regular.
+
+    # Extraer fecha
+    # Busca patrones como "Fecha: 20/10/2025" o "Date: 2025-10-20"
+    fecha = re.search(r'(?:Fecha|Date):\s*(\d{1,2}[/-]\d{1,2}[/-]\d{2,4})', text, re.IGNORECASE)
+    if fecha:
+        data['fecha'] = fecha.group(1).strip()
+
+    # Extraer numero de factura
+    numero = re.search(r'(?:Factura|Invoice)\s*(?:N[°º]?|#|No\.?)?\s*:?\s*([A-Z0-9-]+)', text, re.IGNORECASE)
+    if numero:
+        data['numero'] = numero.group(1).strip()
+
+    # Extraer total
+    # Busca patrones como "Total: $1,500.00" o "TOTAL $1500"
+    total = re.search(r'(?:Total|TOTAL):\s*\$?\s*([\d,]+\.?\d*)', text, re.IGNORECASE)
+    if total:
+        total_str = total.group(1).replace(',', '')
+        data['total'] = float(total_str)
+
+    # Extraer CUIT/CUIL (formato argentino)
+    cuit = re.search(r'(?:CUIT|CUIL):\s*(\d{2}-\d{8}-\d)', text, re.IGNORECASE)
+    if cuit:
+        data['cuit'] = cuit.group(1).strip()
+
+    return data
