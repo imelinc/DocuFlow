@@ -61,6 +61,9 @@ def lambda_handler(event, context):
                 texto_extraido += item['Text'] + " " # agregamos el texto a la cadena.
         print(f"Texto extraido: {texto_extraido[:200]}...") # mostramos el texto extraido (primeros 200 caracteres).
 
+        # Extraer informacion estructurada
+        structured_data = extract_invoice_data(texto_extraido)
+
         # 4 - creamos el registro para DynamoDB
         table = dynamodb.Table(DYNAMODB_TABLE)
         invoice_id = object_key.split('/')[-1] # usamos el nombre de archivo como ID de la factura.
@@ -74,6 +77,12 @@ def lambda_handler(event, context):
             "extractedText": texto_extraido[:1000], # limitamos el texto a 1000 caracteres para no exceder el limite de DynamoDB.
             "status": "processed",
             "processingDate": datetime.now().isoformat(),
+            # informacion estructurada
+            'proveedor': structured_data.get('proveedor', 'No encontrado'),
+            'fecha': structured_data.get('fecha', 'No encontrado'),
+            'numeroFactura': structured_data.get('numeroFactura', 'No encontrado'),
+            'total': structured_data.get('total', 0.0),
+            'cuit': structured_data.get('cuit', 'No encontrado')
         }
 
         # Guardamos el registro en DynamoDB
