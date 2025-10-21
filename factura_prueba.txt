@@ -1,0 +1,36 @@
+FACTURA TIPO A
+
+Punto de Venta: 0001
+Número: 00005678
+Fecha de Emisión: 21/10/2025
+
+PROVEEDOR:
+Empresa: Servicios Digitales SRL
+CUIT: 30-98765432-1
+Domicilio Comercial: Av. Libertador 5555, CABA
+IVA: Responsable Inscripto
+
+CLIENTE:
+Razón Social: TechStart SA
+CUIT: 30-11223344-5
+
+DETALLE:
+------------------------------------------------
+Descripción              Cantidad    Precio Unit.    Subtotal
+------------------------------------------------
+Desarrollo Web              1        $120,000.00    $120,000.00
+Hosting Anual               1        $15,000.00     $15,000.00
+Dominio .com                1        $2,500.00      $2,500.00
+------------------------------------------------
+
+Subtotal:                                           $137,500.00
+IVA 21%:                                            $28,875.00
+------------------------------------------------
+TOTAL:                                              $166,375.00
+------------------------------------------------
+
+Forma de Pago: Transferencia Bancaria
+Vencimiento: 30/11/2025
+
+CAE: 67891234567890
+Vto. CAE: 30/10/2025
